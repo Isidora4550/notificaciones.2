@@ -11,6 +11,9 @@ import com.retailmax.notifications.model.Promocion;
 import com.retailmax.notifications.service.PromocionService;
 
 import java.util.List;
+import org.springframework.hateoas.EntityModel;
+//import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/api/promociones")
@@ -29,8 +32,14 @@ public class PromocionController {
         return promocionService.save(promocion);
     }
     @GetMapping("/{id}")
-public Promocion buscarPorId(@PathVariable Long id) {
-    return promocionService.buscarPorId(id)
+    public EntityModel<Promocion> buscarPorId(@PathVariable Long id) {
+        Promocion promocion = promocionService.buscarPorId(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-}
+
+        EntityModel<Promocion> resource = EntityModel.of(promocion);
+        resource.add(linkTo(methodOn(PromocionController.class).buscarPorId(id)).withSelfRel());
+        resource.add(linkTo(methodOn(PromocionController.class).listar()).withRel("all"));
+
+        return resource;
+    }
 }
