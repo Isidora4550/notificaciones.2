@@ -23,9 +23,8 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("RetailMax Notifications API")
                         .version("1.0.0")
-                        .description("API REST para el sistema de notificaciones y gestión de usuarios de RetailMax. " +
-                                   "Esta API proporciona endpoints para la gestión completa de usuarios, " +
-                                   "incluyendo operaciones CRUD, validaciones, y manejo de estados. " +
+                        .description("API REST para el sistema de notificaciones de RetailMax. " +
+                                   "Esta API proporciona endpoints para la gestión de notificaciones, promociones y preferencias de notificación. " +
                                    "Diseñada para integrarse con sistemas de retail y e-commerce.")
                         .contact(new Contact()
                                 .name("RetailMax Development Team")
@@ -36,7 +35,7 @@ public class SwaggerConfig {
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:8082")
+                                .url("http://localhost:8080")
                                 .description("Servidor de desarrollo local"),
                         new Server()
                                 .url("https://dev-api.retailmax.com")
@@ -47,14 +46,14 @@ public class SwaggerConfig {
                 ))
                 .tags(List.of(
                         new Tag()
-                                .name("Usuarios")
-                                .description("Operaciones relacionadas con la gestión de usuarios del sistema"),
-                        new Tag()
-                                .name("Pedidos")
-                                .description("Operaciones relacionadas con la gestión de pedidos (futuro)"),
-                        new Tag()
                                 .name("Notificaciones")
-                                .description("Operaciones relacionadas con el sistema de notificaciones (futuro)")
+                                .description("Operaciones relacionadas con el sistema de notificaciones"),
+                        new Tag()
+                                .name("Promociones")
+                                .description("Operaciones relacionadas con la gestión de promociones"),
+                        new Tag()
+                                .name("Preferencias")
+                                .description("Operaciones relacionadas con las preferencias de notificación")
                 ))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", 
