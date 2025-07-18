@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(NotificacionController.class)
@@ -53,5 +52,58 @@ class NotificacionControllerTest {
                 .content(objectMapper.writeValueAsString(notif)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.mensaje").value("Mensaje de prueba"));
+    }
+
+    @Test
+    void testActualizar() throws Exception {
+        Notificacion notif = new Notificacion();
+        notif.setId(1L);
+        notif.setTipo("producto");
+        notif.setMensaje("Mensaje actualizado");
+        notif.setIdUsuarioDestinatario(1L);
+        notif.setEstado("ENVIADA");
+
+        Mockito.when(service.listarTodas()).thenReturn(Collections.singletonList(notif));
+        Mockito.when(service.guardar(Mockito.any())).thenReturn(notif);
+
+        mockMvc.perform(put("/api/notificaciones/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(notif)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mensaje").value("Mensaje actualizado"));
+    }
+
+    @Test
+    void testEliminar() throws Exception {
+        Notificacion notif = new Notificacion();
+        notif.setId(1L);
+
+        Mockito.when(service.listarTodas()).thenReturn(Collections.singletonList(notif));
+        Mockito.doNothing().when(service).eliminar(1L);
+
+        mockMvc.perform(delete("/api/notificaciones/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void testObtenerPorId() throws Exception {
+        Notificacion notif = new Notificacion();
+        notif.setId(1L);
+
+        Mockito.when(service.listarTodas()).thenReturn(Collections.singletonList(notif));
+
+        mockMvc.perform(get("/api/notificaciones/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testListarPorUsuarioDestinatario() throws Exception {
+        Notificacion notif = new Notificacion();
+        notif.setIdUsuarioDestinatario(1L);
+
+        Mockito.when(service.listarTodas()).thenReturn(Collections.singletonList(notif));
+
+        mockMvc.perform(get("/api/notificaciones/usuario/1"))
+                .andExpect(status().isOk());
     }
 } 

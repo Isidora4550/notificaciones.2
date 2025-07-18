@@ -21,4 +21,8 @@ public class NotificacionService {
     public Notificacion guardar(Notificacion notificacion) {
         return repository.save(notificacion);
     }
+
+    public void eliminar(Long id) {
+        repository.deleteById(id);
+    }
 } 

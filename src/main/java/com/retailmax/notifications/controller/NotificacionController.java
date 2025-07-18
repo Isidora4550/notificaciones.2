@@ -51,7 +51,7 @@ public class NotificacionController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         Optional<Notificacion> existente = service.listarTodas().stream().filter(n -> n.getId().equals(id)).findFirst();
         if (existente.isPresent()) {
-            service.listarTodas().removeIf(n -> n.getId().equals(id));
+            service.eliminar(id);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
